@@ -63,7 +63,7 @@ const get_skin_tone_number = (key: string) => {
 }
 
 function score_to_level(score: number) {
-  return Math.floor(score / 16) + 1
+  return Math.min(Math.floor(score / 16) + 1, 3)
 }
 
 const EMOJI_MERGE_MAP = new Map([
