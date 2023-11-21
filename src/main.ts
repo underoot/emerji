@@ -604,18 +604,19 @@ function game_set_finished(game: Game) {
       field_text += "\n"
     }
 
-    const text = `My score is ${game.score}! and my field looks like this:\n\n${field_text}`
+    const text = `And my field looks like this:\n\n${field_text}`
 
     if (navigator.share) {
       navigator.share({
-        title: "Emerji",
+        title: `I scored ${game.score} in Emerji`,
         text,
         url: window.location.href,
       })
     } else {
       // Copy text to clipboard
       const textArea = document.createElement("textarea")
-      textArea.value = text + "\n\n" + window.location.href
+      textArea.value =
+        `My score is ${game.score}!\n\n` + text + "\n\n" + window.location.href
       document.body.appendChild(textArea)
       textArea.focus()
       textArea.select()
