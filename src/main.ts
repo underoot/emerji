@@ -4,13 +4,23 @@ import {
   game_field_add_emoji,
   game_field_move,
 } from "./lib"
+import { initHelpSystem, setupGestureListeners } from "./help"
 
 const game = game_new()
 
 game_field_init(game, { selector: "#game" })
 game_field_add_emoji(game)
 
+// Initialize help system
+const { hands, isOpen } = initHelpSystem()
+setupGestureListeners(hands)
+
 document.body.addEventListener("keydown", (event) => {
+  // Don't handle game gestures when help is open
+  if (isOpen()) {
+    return
+  }
+
   switch (event.key) {
     case "ArrowUp":
       game_field_move(game, "up")
@@ -41,6 +51,11 @@ gestureZone.addEventListener("touchstart", (event) => {
 })
 
 gestureZone.addEventListener("touchend", (event) => {
+  // Don't handle game gestures when help is open
+  if (isOpen()) {
+    return
+  }
+
   touchEndX = event.changedTouches[0].screenX
   touchEndY = event.changedTouches[0].screenY
 
