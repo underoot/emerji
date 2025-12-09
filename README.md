@@ -2,7 +2,7 @@
 
 > An emoji-based puzzle game where you merge emojis to create new combinations and score points.
 
-Emerji is a 2048-style puzzle game played with emojis on a 5x5 grid. Merge matching emojis to create new combinations, build workers and chefs, and achieve the highest score possible!
+Emerji is a 2048-style puzzle game played with emojis on a 5x5 grid. Merge matching emojis to create new combinations, build workers and chefs, and achieve the highest score possible! Inspired by the [Unicode Emoji sequences](https://underoot.dev/blog/2023/11/21/emerji/).
 
 ## How to Play
 
