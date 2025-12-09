@@ -1,4 +1,4 @@
-# Emerji
+# Emerji 🤝
 
 > An emoji-based puzzle game where you merge emojis to create new combinations and score points.
 
