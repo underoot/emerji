@@ -209,7 +209,7 @@ type TileMovement = {
   destroy: boolean
 }
 
-function game_tile_destroy(game: Game, x: number, y: number) {
+function game_tile_destroy(game: Game, x: number, y: number, showScoreUp: boolean = false, scoreKey?: string) {
   const cell = game_cells_get(game, x, y)
 
   if (cell) {
@@ -222,8 +222,52 @@ function game_tile_destroy(game: Game, x: number, y: number) {
       },
       { once: true }
     )
+
+    if (showScoreUp && scoreKey) {
+      game_show_score_up(game, x, y, scoreKey)
+    }
+
     game_cells_clear(game, x, y)
   }
+}
+
+function game_show_score_up(game: Game, x: number, y: number, key: string) {
+  if (!game.field) {
+    throw new Error("Game is not initialized")
+  }
+
+  const score = EMOJI_KEY_TO_SCORE.get(key)
+  if (!score) {
+    return
+  }
+
+  const scoreUpContainer = document.createElement("div")
+  scoreUpContainer.classList.add("field__score-up")
+
+  const scoreUpText = document.createElement("div")
+  scoreUpText.classList.add("field__score-up-text")
+  scoreUpText.textContent = `+${score}`
+
+  scoreUpContainer.appendChild(scoreUpText)
+
+  const { x: offsetX, y: offsetY } = game_get_offsets(game, x, y)
+  scoreUpContainer.style.left = `${offsetX}px`
+  scoreUpContainer.style.top = `${offsetY}px`
+
+  game.field.root.appendChild(scoreUpContainer)
+
+  // Trigger animation on next frame
+  requestAnimationFrame(() => {
+    scoreUpContainer.classList.add("field__score-up_animate")
+  })
+
+  scoreUpContainer.addEventListener(
+    "animationend",
+    () => {
+      scoreUpContainer.remove()
+    },
+    { once: true }
+  )
 }
 
 function game_tile_move(game: Game, movement: TileMovement) {
@@ -688,7 +732,9 @@ export function game_field_move(game: Game, direction: Direction) {
                 game_tile_destroy(
                   game,
                   merge_cell_coords.x,
-                  merge_cell_coords.y
+                  merge_cell_coords.y,
+                  true,
+                  merge_value.key
                 )
                 merged = true
                 continue
@@ -797,7 +843,9 @@ export function game_field_move(game: Game, direction: Direction) {
                 game_tile_destroy(
                   game,
                   merge_cell_coords.x,
-                  merge_cell_coords.y
+                  merge_cell_coords.y,
+                  true,
+                  merge_value.key
                 )
                 merged = true
                 continue
@@ -906,7 +954,9 @@ export function game_field_move(game: Game, direction: Direction) {
                 game_tile_destroy(
                   game,
                   merge_cell_coords.x,
-                  merge_cell_coords.y
+                  merge_cell_coords.y,
+                  true,
+                  merge_value.key
                 )
                 merged = true
                 continue
@@ -1015,7 +1065,9 @@ export function game_field_move(game: Game, direction: Direction) {
                 game_tile_destroy(
                   game,
                   merge_cell_coords.x,
-                  merge_cell_coords.y
+                  merge_cell_coords.y,
+                  true,
+                  merge_value.key
                 )
                 merged = true
                 continue
